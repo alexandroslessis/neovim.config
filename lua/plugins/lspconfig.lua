@@ -71,20 +71,28 @@ local servers = {
     },
     pyright = {
         pyright = {
-            -- Using Ruff's import organizer
             disableOrganizeImports = true,
         },
         python = {
             analysis = {
+                autoImportCompletions = false,
                 autoSearchPaths = true,
                 diagnosticMode = 'openFilesOnly',
+                typeCheckingMode = 'standard',
                 useLibraryCodeForTypes = true,
                 diagnosticSeverityOverrides = {
-                    reportOptionalMemberAccess = "none",
+                    reportGeneralTypeIssues = 'none',
+                    reportOptionalSubscript = 'none',
+                    reportOptionalMemberAccess = 'none',
+                    reportOptionalCall = 'none',
+                    reportOptionalIterable = 'none',
+                    reportOptionalContextManager = 'none',
+                    reportOptionalOperand = 'none',
                 },
             }
         }
     },
+    pylyzer = {},
     lemminx = {
         root_dir = ''
     },
@@ -109,6 +117,11 @@ return {
             on_attach = on_attach,
             settings = servers['pyright']
         }
+        -- require 'lspconfig'.pylyzer.setup {
+        --     capabilities = capabilities,
+        --     on_attach = on_attach,
+        --     settings = servers['pylyzer']
+        -- }
         require 'lspconfig'.lemminx.setup {
             capabilities = capabilities,
             on_attach = on_attach,
