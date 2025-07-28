@@ -22,3 +22,16 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     vim.highlight.on_yank()
   end,
 })
+
+-- -- Fromat on save
+-- vim.api.nvim_create_autocmd("BufWritePre", {
+--   pattern = "*",
+--   callback = function(args)
+--     require("conform").format({ bufnr = args.buf })
+--   end,
+-- })
+--
+
+vim.cmd([[
+  highlight DiagnosticUnderlineError gui=underline guisp=NONE
+]])

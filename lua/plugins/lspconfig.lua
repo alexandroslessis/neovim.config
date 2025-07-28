@@ -1,4 +1,3 @@
--- local capabilities = vim.lsp.protocol.make_client_capabilities()
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 local on_attach = function(client, bufnr)
     local nmap = function(keys, func, desc)
@@ -6,13 +5,12 @@ local on_attach = function(client, bufnr)
             desc = 'LSP: ' .. desc
         end
 
-        vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc, noremap = true, silent = true  })
+        vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc, noremap = true, silent = true })
 
         if client.name == 'ruff_lsp' then
             -- Disable hover in favor of Pyright
             client.server_capabilities.hoverProvider = false
         end
-
     end
 
     nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
@@ -54,9 +52,8 @@ local on_attach = function(client, bufnr)
     })
 
     vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
-        vim.lsp.handlers.hover, {border = 'single'}
+        vim.lsp.handlers.hover, { border = 'single' }
     )
-
 end
 
 local servers = {
@@ -68,6 +65,27 @@ local servers = {
                 globals = { 'vim' }
             }
         },
+    },
+    basedpyright = {
+        python = {
+            analysis = {
+                autoImportCompletions = false,
+                autoSearchPaths = true,
+                diagnosticMode = 'openFilesOnly',
+                typeCheckingMode = 'off',
+                useLibraryCodeForTypes = true,
+                diagnosticSeverityOverrides = {
+                    reportGeneralTypeIssues = 'none',
+                    reportOptionalSubscript = 'none',
+                    reportOptionalMemberAccess = 'none',
+                    reportOptionalCall = 'none',
+                    reportOptionalIterable = 'none',
+                    reportOptionalContextManager = 'none',
+                    reportOptionalOperand = 'none',
+                    reportUnknownMemberType = 'none',
+                },
+            }
+        }
     },
     pyright = {
         pyright = {
@@ -92,13 +110,11 @@ local servers = {
             }
         }
     },
+    pyrefly = {},
     pylyzer = {},
-    lemminx = {
-        root_dir = ''
-    },
-    ruff_lsp = {
-        args = {}
-    }
+    ty_ls = {},
+    lemminx = {},
+    ruff_lsp = {}
 }
 
 return {
@@ -106,22 +122,41 @@ return {
     dependencies = {
         { "folke/neodev.nvim", opts = {} },
     },
+
     config = function()
         require 'lspconfig'.lua_ls.setup {
             capabilities = capabilities,
             on_attach = on_attach,
             settings = servers['lua_ls'],
         }
-        require 'lspconfig'.pyright.setup {
-            capabilities = capabilities,
-            on_attach = on_attach,
-            settings = servers['pyright']
-        }
+        -- require 'lspconfig'.pyright.setup {
+        --     capabilities = capabilities,
+        --     on_attach = on_attach,
+        --     settings = servers['pyright']
+        -- }
+        -- require 'lspconfig'.basedpyright.setup {
+        --     capabilities = capabilities,
+        --     on_attach = on_attach,
+        --     settings = servers['basedpyright']
+        -- }
+        -- require 'lspconfig'.pyrefly.setup {
+        --     capabilities = capabilities,
+        --     on_attach = on_attach,
+        --     settings = servers['pyrefly']
+        -- }
         -- require 'lspconfig'.pylyzer.setup {
         --     capabilities = capabilities,
         --     on_attach = on_attach,
         --     settings = servers['pylyzer']
         -- }
+        require 'lspconfig'.ty_ls.setup {
+            capabilities = capabilities,
+            on_attach = on_attach,
+            -- settings = servers['ty_ls'],
+            cmd = { "ty", "server" }, -- This is crucial: the command to start the ty LSP server
+            filetypes = { "python" }, -- This is crucial: applies to Python files
+            -- root_dir = require('lspconfig.util').root_pattern("pyproject.toml", ".git", "."), -- Good for project root detection
+        }
         require 'lspconfig'.lemminx.setup {
             capabilities = capabilities,
             on_attach = on_attach,
@@ -134,4 +169,3 @@ return {
         -- }
     end
 }
-

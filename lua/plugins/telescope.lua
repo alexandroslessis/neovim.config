@@ -2,7 +2,7 @@ return {
     'nvim-telescope/telescope.nvim', tag = '0.1.4',
     dependencies = {
         { 'nvim-lua/plenary.nvim' },
-        { 
+        {
             'nvim-telescope/telescope-frecency.nvim',
             config = function()
                 require('telescope').load_extension('frecency')
@@ -24,6 +24,15 @@ return {
         },
     },
     config = function()
+        require('telescope').setup({
+            defaults = {
+                preview = {
+                    hide_on_startup = true,
+                }
+            }
+
+        })
+
         local builtin = require('telescope.builtin')
         vim.keymap.set('n', '<C-f>', builtin.find_files, { desc = 'Find files' })
         vim.keymap.set('n', '<C-g>', ':lua require("telescope").extensions.live_grep_args.live_grep_args()<CR>')
