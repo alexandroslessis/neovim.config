@@ -112,7 +112,11 @@ local servers = {
     },
     pyrefly = {},
     pylyzer = {},
-    ty_ls = {},
+    ty_ls = {
+        cmd = { 'ty', 'server' },
+        filetypes = { 'python' },
+        root_markers = { 'ty.toml', 'pyproject.toml', '.git' },
+    },
     lemminx = {},
     ruff_lsp = {}
 }
@@ -124,16 +128,29 @@ return {
     },
 
     config = function()
+
+        local lspconfig = require('lspconfig')
+        local configs = require('lspconfig.configs')
+        if not configs.ty_ls then
+            configs.ty_ls = {
+                default_config = {
+                    cmd = { 'ty', 'server' },
+                    filetypes = { 'python' },
+                    root_markers = { 'ty.toml', 'pyproject.toml', '.git' },
+                }
+            }
+        end
+
         require 'lspconfig'.lua_ls.setup {
             capabilities = capabilities,
             on_attach = on_attach,
             settings = servers['lua_ls'],
         }
-        -- require 'lspconfig'.pyright.setup {
-        --     capabilities = capabilities,
-        --     on_attach = on_attach,
-        --     settings = servers['pyright']
-        -- }
+        require 'lspconfig'.pyright.setup {
+            capabilities = capabilities,
+            on_attach = on_attach,
+            settings = servers['pyright']
+        }
         -- require 'lspconfig'.basedpyright.setup {
         --     capabilities = capabilities,
         --     on_attach = on_attach,
@@ -149,14 +166,11 @@ return {
         --     on_attach = on_attach,
         --     settings = servers['pylyzer']
         -- }
-        require 'lspconfig'.ty_ls.setup {
-            capabilities = capabilities,
-            on_attach = on_attach,
-            -- settings = servers['ty_ls'],
-            cmd = { "ty", "server" }, -- This is crucial: the command to start the ty LSP server
-            filetypes = { "python" }, -- This is crucial: applies to Python files
-            -- root_dir = require('lspconfig.util').root_pattern("pyproject.toml", ".git", "."), -- Good for project root detection
-        }
+        -- require 'lspconfig'.ty_ls.setup {
+        --     capabilities = capabilities,
+        --     on_attach = on_attach,
+        --     settings = servers['ty_ls'],
+        -- }
         require 'lspconfig'.lemminx.setup {
             capabilities = capabilities,
             on_attach = on_attach,

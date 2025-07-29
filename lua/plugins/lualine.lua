@@ -1,6 +1,6 @@
 -- Status line
 local lsp_client_names = function()
-    local clients = vim.lsp.get_active_clients({ bufnr = 0 })
+    local clients = vim.lsp.get_clients({ bufnr = 0 })
     local client_names = {}
 
     for _, client in pairs(clients) do
