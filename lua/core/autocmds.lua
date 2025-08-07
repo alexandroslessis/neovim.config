@@ -25,14 +25,18 @@ vim.api.nvim_create_autocmd("LspAttach", {
         vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { buffer = bufnr, desc = 'LSP: Go To Definition' })
         vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, { buffer = bufnr, desc = 'LSP: Go To Declaration' })
         vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, { buffer = bufnr, desc = 'LSP: Go To Implementation' }) -- Added implementation
-        vim.keymap.set('n', 'gr', vim.lsp.buf.references, { buffer = bufnr, desc = 'LSP: Go To References' }) -- Added references
+        vim.keymap.set('n', 'gr', vim.lsp.buf.references, { buffer = bufnr, desc = 'LSP: Go To References' })         -- Added references
         vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = bufnr, desc = 'LSP: Documentation' })
-        vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, { buffer = bufnr, desc = 'LSP: Code Action' }) -- Added code action
-        vim.keymap.set('n', '<C-A-l>', function() vim.lsp.buf.format({ async = true }) end, { buffer = bufnr, desc = 'LSP: Format' })
-        vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { buffer = bufnr, desc = 'LSP: Open Diagnostic Float' })
+        vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, { buffer = bufnr, desc = 'LSP: Code Action' })     -- Added code action
+        vim.keymap.set('n', '<C-A-l>', function() vim.lsp.buf.format({ async = true }) end,
+            { buffer = bufnr, desc = 'LSP: Format' })
+        vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float,
+            { buffer = bufnr, desc = 'LSP: Open Diagnostic Float' })
         vim.keymap.set('n', '<leader>r', vim.lsp.buf.rename, { buffer = bufnr, desc = 'LSP: Rename' })
-        vim.keymap.set('n', ']e', function() vim.diagnostic.goto_next() end, { buffer = bufnr, desc = 'LSP: Go To Next Diagnostic' })
-        vim.keymap.set('n', '[e', function() vim.diagnostic.goto_prev() end, { buffer = bufnr, desc = 'LSP: Go To Previous Diagnostic' })
+        vim.keymap.set('n', ']e', function() vim.diagnostic.goto_next() end,
+            { buffer = bufnr, desc = 'LSP: Go To Next Diagnostic' })
+        vim.keymap.set('n', '[e', function() vim.diagnostic.goto_prev() end,
+            { buffer = bufnr, desc = 'LSP: Go To Previous Diagnostic' })
 
         if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_documentHighlight, bufnr) then
             local highlight_augroup = vim.api.nvim_create_augroup('lsp-highlight', { clear = false })

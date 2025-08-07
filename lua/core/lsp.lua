@@ -1,7 +1,7 @@
 vim.lsp.enable({
     -- "ty_ls",
-    "pyright",
-    -- "basedpyright",
+    -- "pyright",
+    "basedpyright",
     -- "pyrefly",
     "ruff_ls",
     "lua_ls"
